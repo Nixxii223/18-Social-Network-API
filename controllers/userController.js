@@ -50,5 +50,29 @@ module.exports = {
             console.error(err);
             res.status(400).json(err);
         }
+    },
+
+    async addFriend({ params }, res) {
+        try {
+            const user = await User.findOneAndUpdate(
+                { _id: params.userId },
+                { $addToSet: { friends: params.friendId } },
+                { new: true }
+            );
+            res.json(user);
+        } catch (err) {
+            console.error(err);
+            res.status(400).json(err);
+        }
+    },
+
+    async deleteFriend({ params }, res) {
+        try {
+            const user = await User.findOneAndDelete({ _id: params.thoughtId }, { $pull: { reactions: { reactionId: params.reactionId } } }, { new: true });
+                res.json(thought);
+        } catch (err) {
+            console.error(err);
+            res.status(400).json(err);
+        }
     }
 };    
