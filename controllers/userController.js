@@ -74,9 +74,19 @@ module.exports = {
 
     async deleteFriend({ params }, res) {
         try {
-            const user = await User.findOneAndDelete({ _id: params.thoughtId }, { $pull: { reactions: { reactionId: params.reactionId } } }, { new: true });
-                res.json(user);
-                console.log(user);
+            const user = await User.findOneAndUpdate(
+                { _id: params.userId },
+                { $pull: { friends: params.friendId } },
+                { new: true }
+            );
+    
+            if (!user) {
+                res.status(404).json({ message: 'No user found with this id!' });
+                return;
+            }
+    
+            res.json(user);
+            console.log(user);
         } catch (err) {
             console.error(err);
             res.status(400).json(err);
