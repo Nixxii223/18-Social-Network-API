@@ -5,6 +5,7 @@ module.exports = {
         try {
             const users = await User.find({});
             res.json(users);
+            console.log(users);
         } catch (err) {
             console.error(err);
             res.status(400).json(err);
@@ -15,6 +16,7 @@ module.exports = {
         try {
             const user = await User.findOne({ _id: params.id });
             res.json(user);
+            console.log(user);
         } catch (err) {
             console.error(err);
             res.status(400).json(err);
@@ -25,6 +27,7 @@ module.exports = {
         try {
             const user = await User.create(body);
             res.json(user);
+            console.log(user);
         } catch (err) {
             console.error(err);
             res.status(400).json(err);
@@ -35,6 +38,7 @@ module.exports = {
         try {
             const user = await User.findOneAndDelete({ _id: params.id });
             res.json(user);
+            console.log(user);
         } catch (err) {
             console.error(err);
             res.status(400).json(err);
@@ -46,6 +50,7 @@ module.exports = {
             const user = await User.findOneAndUpdate({ _id: params.id },
                 body, { new: true, runValidators: true });
             res.json(user);
+            console.log(user);
         } catch (err) {
             console.error(err);
             res.status(400).json(err);
@@ -60,6 +65,7 @@ module.exports = {
                 { new: true }
             );
             res.json(user);
+            console.log(user);
         } catch (err) {
             console.error(err);
             res.status(400).json(err);
@@ -70,6 +76,7 @@ module.exports = {
         try {
             const user = await User.findOneAndDelete({ _id: params.thoughtId }, { $pull: { reactions: { reactionId: params.reactionId } } }, { new: true });
                 res.json(user);
+                console.log(user);
         } catch (err) {
             console.error(err);
             res.status(400).json(err);

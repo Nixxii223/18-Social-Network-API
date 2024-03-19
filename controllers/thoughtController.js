@@ -24,13 +24,13 @@ module.exports = {
     async createThought({ body }, res) {
         try {
             const thought = await Thought.create(body);
-            User.findOneAndUpdate(thought.userId, { $push: { thoughts: thought._id } }, { new: true });
+            await User.findOneAndUpdate({ _id: thought.userId }, { $push: { thoughts: thought._id } }, { new: true });
             res.json(thought);
         } catch (err) {
             console.error(err);
             res.status(400).json(err);
-            }
-        },
+        }
+    },
 
     async updateThought({ params, body }, res) {
         try {
@@ -71,7 +71,7 @@ module.exports = {
 
     async deleteReaction({ params }, res) {
         try{
-            const thought = await Thought.findOneAndDelete({ _id: params.thoughtId }, { $pull: { reactions: { reactionId: params.reactionId } } }, { new: true });
+            const thought = await Thought.findOneAndUpdate({ _id: params.thoughtId }, { $pull: { reactions: { reactionId: params.reactionId } } }, { new: true });
             res.json(thought);
         } catch (err) {
             console.error(err);
