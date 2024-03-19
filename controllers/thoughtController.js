@@ -24,7 +24,6 @@ module.exports = {
     async createThought({ body }, res) {
         try {
             const thought = await Thought.create(body);
-            const user = await
             User.findOneAndUpdate(thought.userId, { $push: { thoughts: thought._id } }, { new: true });
             res.json(thought);
         } catch (err) {
@@ -46,11 +45,17 @@ module.exports = {
     async deleteThought({ params }, res) {
         try {
             const thought = await Thought.findOneAndDelete({ _id: params.id });
-            const user = await User.findOneAndUpdate(thought.userId, { $pull: { thoughts: thought._id } }, { new: true });
-            res.json(thought);
+    
+            if (!thought) {
+                return res.status(404).json({ message: 'No thought found with this id!' });
+            }
+    
+            await User.findOneAndUpdate(thought.userId, { $pull: { thoughts: thought._id } }, { new: true });
+    
+            return res.json(thought);
         } catch (err) {
             console.error(err);
-            res.status(400).json(err);
+            return res.status(400).json(err);
         }
     },
     
